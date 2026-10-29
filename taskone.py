@@ -1,25 +1,24 @@
+
 import requests
 import csv
-with open ('books.csv', 'w',newline="", encoding="utf-8-sig") as file:
-     writer = csv.writer(file)
+
 url = "https://openlibrary.org/search.json"
 
-param = {
-    'q' : 'python'
-    ,
-    'limit':50
+params = {
+    "q": "python",
+    "limit": 50,
 }
 
-response = requests.get(url,params=param)
+response = requests.get(url, params=params)
 data = response.json()
 
-with open ('books.csv', 'w',newline="", encoding="utf-8-sig") as file:
-     writer = csv.writer(file)
-     writer.writerow(['book','First Published'])
-     for i  in data['docs'] :
-         year = (i.get('first_publish_year'))
-         if year is  not None and  year > 2000 :
-             title = (i.get('title'))
-             writer.writerow([title,year])
-            
-          
+with open("books.csv", "w", newline="", encoding="utf-8-sig") as file:
+    writer = csv.writer(file)
+    writer.writerow(["Book", "First Published"])
+
+    for book in data["docs"]:
+        year = book.get("first_publish_year")
+
+        if year is not None and year > 2000:
+            title = book.get("title", "Unknown")
+            writer.writerow([title, year])
